@@ -28,7 +28,7 @@ class _HomeState extends State<Home> {
                   style: Appwidget.boldTextFieldStyle(), // Fixed method call
                 ),
                 Container(
-                  margin: EdgeInsets.only(right: 20.0),
+                  margin: const EdgeInsets.only(right: 20.0),
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     color: Colors.black,
@@ -50,6 +50,7 @@ class _HomeState extends State<Home> {
             
             Container(
               margin: const EdgeInsets.only(right: 20.0),
+              
               child: showItem(),
             ),
             // ignore: prefer_const_constructors
@@ -139,15 +140,15 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
-          SizedBox(height: 30.0,),
+          const SizedBox(height: 30.0,),
           
           Container(
-            margin: EdgeInsets.only(right: 15.0),
+            margin: const EdgeInsets.only(right: 15.0),
             child: Material(
               elevation: 5.0,
               borderRadius: BorderRadius.circular(20.0),
               child: Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -171,7 +172,7 @@ class _HomeState extends State<Home> {
                           ],
                         ),
                       ),
-                        SizedBox(height: 5.0,),
+                        const SizedBox(height: 5.0,),
                       Container(
                         width: MediaQuery.of(context).size.width / 2, // Set width here
                         child: Column(
@@ -185,7 +186,7 @@ class _HomeState extends State<Home> {
                         ),
                       ),
 
-                      SizedBox(height: 5.0,),
+                      const SizedBox(height: 5.0,),
                       Container(
                         width: MediaQuery.of(context).size.width / 2, // Set width here
                         child: Column(

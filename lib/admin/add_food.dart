@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddeliveryapp/service/database.dart';
 import 'package:fooddeliveryapp/widget/widget_support.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:random_string/random_string.dart';
@@ -21,53 +22,49 @@ class _AddfoodState extends State<Addfood> {
   final ImagePicker _picker = ImagePicker();
   File? selectImage;
 
-  Future<void> getImage() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      setState(() {
-        selectImage = File(image.path);
-      });
-    }
+  Future getImage() async {
+    var image = await _picker.pickImage(source: ImageSource.gallery);
+
+    selectImage = File(image!.path);
+    setState(() {
+      
+    });
   }
 
-  Future<void> uploadItem() async {
-    if (selectImage != null &&
-        namecontroller.text.isNotEmpty &&
-        pricecontroller.text.isNotEmpty &&
-        detailcontroller.text.isNotEmpty) {
+  uploadItem()async{
+    if (
+      selectImage!= null &&
+      namecontroller.text != "" &&
+      pricecontroller.text != "" &&
+      detailcontroller.text != ""
+      ) {
       String addId = randomAlphaNumeric(10);
+      Reference firebaseStorageRef = 
+        FirebaseStorage.instance.ref().child("blogImages").child(addId);
 
-      try {
-        Reference firebaseStorageRef =
-            FirebaseStorage.instance.ref().child('foodImages').child(addId);
-        final UploadTask task = firebaseStorageRef.putFile(selectImage!);
-        TaskSnapshot snapshot = await task;
+      final UploadTask task = firebaseStorageRef.putFile(selectImage!);
 
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        debugPrint('Image uploaded successfully. URL: $downloadUrl');
+      var downloadUrl = await(await task).ref.getDownloadURL();
 
-        // Clear fields after successful upload
-        setState(() {
-          selectImage = null;
-          namecontroller.clear();
-          pricecontroller.clear();
-          detailcontroller.clear();
-          value = null;
-        });
+      Map<String, dynamic> addItem = {
+        "Image": downloadUrl,
+        "Name": namecontroller.text,
+        "Price": pricecontroller.text,
+        "Detail": detailcontroller.text,
+      };
 
+      await DatabaseMethods().addFoodItem(addItem, value!).then((value) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Item uploaded successfully!')),
+          const SnackBar(
+            backgroundColor: Colors.orangeAccent,
+            content: Text(
+              "Food Item has been added Successfully",
+              style: TextStyle(fontSize: 18.0),
+            ),
+          ),
         );
-      } catch (e) {
-        debugPrint('Error uploading image: $e');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error uploading item.')),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all fields and select an image')),
-      );
+      });
+
     }
   }
 
@@ -79,21 +76,23 @@ class _AddfoodState extends State<Addfood> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(Icons.arrow_back_ios_new_outlined, color: Colors.black),
+          child: const Icon(Icons.arrow_back_ios_new_outlined,
+              color: Colors.black),
         ),
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Add Item",
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
         ),
       ),
       body: SingleChildScrollView(
         child: Container(
-          margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0, bottom: 30.0),
+          margin: const EdgeInsets.only(
+              left: 20.0, right: 20.0, top: 20.0, bottom: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 "Upload the Item Picture",
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
@@ -112,7 +111,8 @@ class _AddfoodState extends State<Addfood> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: selectImage == null
-                          ? const Icon(Icons.camera_alt_outlined, size: 50, color: Colors.black)
+                          ? const Icon(Icons.camera_alt_outlined,
+                              size: 50, color: Colors.black)
                           : ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.file(
@@ -171,7 +171,7 @@ class _AddfoodState extends State<Addfood> {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: TextField(
-                  controller: namecontroller,
+                  controller: detailcontroller,
                   decoration: const InputDecoration(
                     hintText: "Enter Item Detail",
                     border: InputBorder.none,
@@ -179,7 +179,8 @@ class _AddfoodState extends State<Addfood> {
                 ),
               ),
               const SizedBox(height: 30.0),
-              Text("Select Category", style: Appwidget.currentBoldTextFieldStyle()),
+              Text("Select Category",
+                  style: Appwidget.currentBoldTextFieldStyle()),
               const SizedBox(height: 10.0),
               DropdownButton<String>(
                 items: items.map((item) {
