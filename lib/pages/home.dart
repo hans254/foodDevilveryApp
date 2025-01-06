@@ -15,7 +15,8 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: SingleChildScrollView(
+        child: Container(
         margin: const EdgeInsets.only(top: 50.0, left: 10.0,),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,6 +212,7 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+      )
     );
   }
 

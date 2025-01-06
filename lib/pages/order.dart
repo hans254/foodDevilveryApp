@@ -68,7 +68,7 @@ class _OrderState extends State<Order> {
             ),
             ),
             ),
-            Spacer(),
+            const Spacer(),
             const Divider(),
             Padding(
               padding: const EdgeInsets.only(left: 10.0, right: 10.0),

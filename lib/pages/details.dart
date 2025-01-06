@@ -18,7 +18,8 @@ class _DetailsState extends State<Details> {
     final screenHeight = MediaQuery.of(context).size.height; // Responsive height
 
     return Scaffold(
-      body: Container(
+      body:
+        Container(
         margin: const EdgeInsets.only(top: 50.0, left: 20.0, right: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -215,6 +216,7 @@ class _DetailsState extends State<Details> {
           ],
         ),
       ),
+     
     );
   }
 }
