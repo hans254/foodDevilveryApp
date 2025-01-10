@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:fooddeliveryapp/pages/bottomnav.dart';
 // import 'package:fooddeliveryapp/admin/admin_login.dart';
 //import 'package:fooddeliveryapp/admin/home_admin.dart';
 // import 'package:fooddeliveryapp/pages/bottomnav.dart';
@@ -8,11 +9,8 @@ import 'package:fooddeliveryapp/pages/onboard.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    debugPrint('Error during Firebase initialization: $e');
-  }
+  await Firebase.initializeApp();
+  
   runApp(const MyApp());
 }
 
